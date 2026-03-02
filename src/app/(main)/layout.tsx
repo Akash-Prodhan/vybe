@@ -16,7 +16,7 @@ export default async function MainLayout({
     }
 
     return (
-        <div className="flex min-h-screen bg-white">
+        <div className="flex min-h-screen bg-bg">
             <Sidebar />
             <main className="flex-1 min-h-screen pb-16 md:pb-0">
                 {children}

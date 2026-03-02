@@ -23,55 +23,44 @@ export default function ForgotPasswordPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white px-4">
-            <div className="w-full max-w-sm fade-in">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-primary">Vybe</h1>
-                    <p className="text-secondary mt-2">Reset your password</p>
+        <div className="min-h-screen flex items-center justify-center bg-bg gradient-mesh px-4">
+            <div className="w-full max-w-md fade-in">
+                <div className="text-center mb-6">
+                    <Link href="/" className="text-3xl font-extrabold font-display gradient-text">Vybe</Link>
                 </div>
 
-                <form action={handleSubmit} className="space-y-4">
-                    {error && (
-                        <div className="p-3 rounded-xl bg-red-50 text-red-600 text-sm text-center">
-                            {error}
-                        </div>
-                    )}
-                    {success && (
-                        <div className="p-3 rounded-xl bg-green-50 text-green-600 text-sm text-center">
-                            {success}
-                        </div>
-                    )}
+                <div className="card-glass p-8 md:p-10">
+                    <h1 className="text-2xl font-bold font-display mb-1">Reset password</h1>
+                    <p className="text-secondary text-sm mb-6">We&apos;ll send you a reset link</p>
 
-                    <div>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            required
-                            className="input"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn btn-primary w-full py-3"
-                    >
-                        {loading ? (
-                            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        ) : (
-                            'Send Reset Link'
+                    <form action={handleSubmit} className="space-y-4">
+                        {error && (
+                            <div className="p-3 rounded-xl bg-danger/10 text-danger text-sm text-center border border-danger/20">
+                                {error}
+                            </div>
                         )}
-                    </button>
-                </form>
+                        {success && (
+                            <div className="p-3 rounded-xl bg-success/10 text-success text-sm text-center border border-success/20">
+                                {success}
+                            </div>
+                        )}
 
-                <p className="mt-6 text-center text-sm text-secondary">
-                    Remember your password?{' '}
-                    <Link href="/login" className="text-primary font-medium hover:underline">
-                        Sign in
-                    </Link>
-                </p>
+                        <input id="email" name="email" type="email" placeholder="Email address" required className="input" />
+
+                        <button type="submit" disabled={loading} className="btn btn-primary w-full py-3 font-semibold">
+                            {loading ? (
+                                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : (
+                                'Send Reset Link'
+                            )}
+                        </button>
+                    </form>
+
+                    <p className="mt-5 text-center text-sm text-secondary">
+                        Remember your password?{' '}
+                        <Link href="/login" className="text-accent font-medium hover:underline">Sign in</Link>
+                    </p>
+                </div>
             </div>
         </div>
     );

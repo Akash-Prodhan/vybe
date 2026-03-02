@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export async function signUp(formData: FormData) {
     const supabase = await createClient();
@@ -65,9 +66,11 @@ export async function signOut() {
 export async function forgotPassword(formData: FormData) {
     const supabase = await createClient();
     const email = formData.get('email') as string;
+    const headersList = await headers();
+    const origin = headersList.get('origin') || 'http://localhost:3000';
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL ? '' : 'http://localhost:3000'}/auth/callback?next=/feed`,
+        redirectTo: `${origin}/auth/callback?next=/feed`,
     });
 
     if (error) {
@@ -75,4 +78,25 @@ export async function forgotPassword(formData: FormData) {
     }
 
     return { success: 'Check your email for a password reset link' };
+}
+
+export async function signInWithGoogle() {
+    const supabase = await createClient();
+    const headersList = await headers();
+    const origin = headersList.get('origin') || 'http://localhost:3000';
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: `${origin}/auth/callback`,
+        },
+    });
+
+    if (error) {
+        return { error: error.message };
+    }
+
+    if (data?.url) {
+        redirect(data.url);
+    }
 }
