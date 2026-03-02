@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
     const isPublicRoute = publicRoutes.some((route) =>
         request.nextUrl.pathname.startsWith(route)
     );
+    const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
 
     if (!user && !isPublicRoute && request.nextUrl.pathname !== '/') {
         const url = request.nextUrl.clone();
@@ -42,6 +43,21 @@ export async function middleware(request: NextRequest) {
         const url = request.nextUrl.clone();
         url.pathname = '/feed';
         return NextResponse.redirect(url);
+    }
+
+    // Admin route protection: server-side role check
+    if (isAdminRoute && user) {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+
+        if (!profile || profile.role !== 'admin') {
+            const url = request.nextUrl.clone();
+            url.pathname = '/feed';
+            return NextResponse.redirect(url);
+        }
     }
 
     return supabaseResponse;
