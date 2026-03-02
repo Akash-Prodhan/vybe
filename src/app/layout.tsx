@@ -4,8 +4,7 @@ import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Vybe — Connect, Share, Chat",
-  description: "A modern social media platform for sharing moments, stories, and connecting with people in real-time.",
-  keywords: ["social media", "chat", "stories", "connect", "share"],
+  description: "A modern social platform for sharing moments, stories, and connecting with people in real-time.",
 };
 
 export default function RootLayout({
@@ -21,12 +20,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var t = localStorage.getItem('vybe-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                document.documentElement.setAttribute('data-theme', t);
-              })();
-            `,
+            __html: `(function(){var t=localStorage.getItem('vybe-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();`,
           }}
         />
       </head>
