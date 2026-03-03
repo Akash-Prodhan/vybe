@@ -52,7 +52,8 @@ export default function SignupPage() {
 
                         <div>
                             <label htmlFor="username" className="block text-xs font-bold text-secondary uppercase tracking-wide mb-1.5">Username</label>
-                            <input id="username" name="username" type="text" required pattern="^[a-zA-Z0-9_]+$" title="Letters, numbers, and underscores only" maxLength={30} className="input" />
+                            <input id="username" name="username" type="text" required pattern="^[a-z0-9_.]+$" title="Lowercase letters, numbers, underscores, and periods" minLength={3} maxLength={30} className="input" placeholder="e.g. john_doe" />
+                            <p className="text-[10px] text-muted mt-0.5">3-30 chars • lowercase, numbers, _ and . only</p>
                         </div>
 
                         <div>
@@ -62,7 +63,8 @@ export default function SignupPage() {
 
                         <div>
                             <label htmlFor="password" className="block text-xs font-bold text-secondary uppercase tracking-wide mb-1.5">Password</label>
-                            <input id="password" name="password" type="password" required minLength={6} className="input" />
+                            <input id="password" name="password" type="password" required minLength={8} pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}" title="Min 8 chars, 1 uppercase, 1 number, 1 special character" className="input" />
+                            <p className="text-[10px] text-muted mt-0.5">Min 8 chars • 1 uppercase • 1 number • 1 special</p>
                         </div>
 
                         <button type="submit" disabled={loading} className="btn btn-primary w-full py-2.5 font-medium">

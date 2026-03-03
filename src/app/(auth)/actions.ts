@@ -11,11 +11,27 @@ export async function signUp(formData: FormData) {
     const username = formData.get('username') as string;
     const fullName = formData.get('fullName') as string;
 
+    // Password validation
+    if (password.length < 8) return { error: 'Password must be at least 8 characters' };
+    if (!/[A-Z]/.test(password)) return { error: 'Password needs 1 uppercase letter' };
+    if (!/[0-9]/.test(password)) return { error: 'Password needs 1 number' };
+    if (!/[^a-zA-Z0-9]/.test(password)) return { error: 'Password needs 1 special character' };
+
+    // Username validation
+    const uname = username.toLowerCase();
+    if (uname.length < 3 || uname.length > 30) return { error: 'Username must be 3-30 characters' };
+    if (!/^[a-z0-9_.]+$/.test(uname)) return { error: 'Username: lowercase, numbers, _ and . only' };
+    if (/^[_.]|[_.]$/.test(uname)) return { error: 'Cannot start/end with _ or .' };
+    if (/__|\.\./.test(uname)) return { error: 'No consecutive _ or .' };
+
+    const reserved = ['admin', 'support', 'official', 'null', 'undefined', 'system', 'moderator', 'help', 'vybe'];
+    if (reserved.includes(uname)) return { error: 'Username is reserved' };
+
     // Check if username is taken
     const { data: existing } = await supabase
         .from('profiles')
         .select('username')
-        .eq('username', username.toLowerCase())
+        .eq('username', uname)
         .single();
 
     if (existing) {

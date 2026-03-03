@@ -15,16 +15,6 @@ export default async function MyProfilePage() {
 
     if (!profile) redirect('/login');
 
-    const { count: followersCount } = await supabase
-        .from('followers')
-        .select('*', { count: 'exact', head: true })
-        .eq('following_id', user.id);
-
-    const { count: followingCount } = await supabase
-        .from('followers')
-        .select('*', { count: 'exact', head: true })
-        .eq('follower_id', user.id);
-
     const { data: posts } = await supabase
         .from('posts')
         .select(`
@@ -42,8 +32,8 @@ export default async function MyProfilePage() {
         <ProfileClient
             profile={profile}
             posts={posts || []}
-            followersCount={followersCount || 0}
-            followingCount={followingCount || 0}
+            followersCount={profile.follower_count || 0}
+            followingCount={profile.following_count || 0}
             currentUserId={user.id}
             isOwnProfile={true}
         />

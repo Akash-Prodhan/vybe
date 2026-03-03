@@ -16,26 +16,33 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
 
     if (!profile) notFound();
 
-    // Redirect to own profile page if viewing self
     if (profile.id === user.id) {
         redirect('/profile');
     }
 
-    const { count: followersCount } = await supabase
-        .from('followers')
-        .select('*', { count: 'exact', head: true })
-        .eq('following_id', profile.id);
-
-    const { count: followingCount } = await supabase
-        .from('followers')
-        .select('*', { count: 'exact', head: true })
-        .eq('follower_id', profile.id);
-
+    // Check follow status
     const { data: isFollowing } = await supabase
         .from('followers')
         .select('id')
         .eq('follower_id', user.id)
         .eq('following_id', profile.id)
+        .single();
+
+    // Check follow request status
+    const { data: followRequest } = await supabase
+        .from('follow_requests')
+        .select('id')
+        .eq('requester_id', user.id)
+        .eq('target_id', profile.id)
+        .eq('status', 'pending')
+        .single();
+
+    // Check block status
+    const { data: blockCheck } = await supabase
+        .from('user_blocks')
+        .select('id')
+        .eq('blocker_id', user.id)
+        .eq('blocked_id', profile.id)
         .single();
 
     const { data: posts } = await supabase
@@ -55,11 +62,13 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
         <ProfileClient
             profile={profile}
             posts={posts || []}
-            followersCount={followersCount || 0}
-            followingCount={followingCount || 0}
+            followersCount={profile.follower_count || 0}
+            followingCount={profile.following_count || 0}
             currentUserId={user.id}
             isOwnProfile={false}
             isFollowing={!!isFollowing}
+            isBlocked={!!blockCheck}
+            hasRequestedFollow={!!followRequest}
         />
     );
 }
