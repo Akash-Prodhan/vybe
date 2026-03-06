@@ -10,7 +10,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-    theme: 'dark',
+    theme: 'light',
     toggleTheme: () => { },
 });
 
@@ -19,12 +19,12 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>('dark');
+    const [theme, setTheme] = useState<Theme>('light');
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         const stored = localStorage.getItem('vybe-theme') as Theme;
-        const initial = stored || 'dark'; // Discord-style: dark by default
+        const initial = stored || 'light'; // Facebook-style: light by default
         setTheme(initial);
         document.documentElement.setAttribute('data-theme', initial);
         setMounted(true);
@@ -43,7 +43,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
                 dangerouslySetInnerHTML={{
                     __html: `
             (function() {
-              var t = localStorage.getItem('vybe-theme') || 'dark';
+              var t = localStorage.getItem('vybe-theme') || 'light';
               document.documentElement.setAttribute('data-theme', t);
             })();
           `,

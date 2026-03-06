@@ -28,30 +28,30 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
     async function handleEdit() { await editPost(post.id, editContent); setEditing(false); router.refresh(); }
 
     return (
-        <div className="card p-4 mb-3 rounded-lg hover:bg-surface-hover/30 transition-colors fade-in">
+        <div className="card p-0 mb-4 overflow-hidden fade-in">
             {/* Header */}
-            <div className="flex items-start justify-between mb-2">
-                <Link href={`/profile/${profile?.username}`} className="flex items-center gap-2.5 group">
-                    <div className="w-9 h-9 avatar text-xs flex-shrink-0">
+            <div className="flex items-center justify-between p-4 pb-2">
+                <Link href={`/profile/${profile?.username}`} className="flex items-center gap-3 group">
+                    <div className="w-10 h-10 avatar text-xs flex-shrink-0">
                         {profile?.avatar_url ? (
-                            <img src={profile.avatar_url} alt="" className="w-9 h-9 rounded-full object-cover" />
+                            <img src={profile.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                         ) : getInitials(profile?.full_name || profile?.username || '')}
                     </div>
                     <div>
-                        <p className="text-sm font-semibold group-hover:text-accent transition-colors">{profile?.full_name || profile?.username}</p>
-                        <p className="text-[11px] text-muted">@{profile?.username} · {formatRelativeTime(post.created_at)}</p>
+                        <p className="text-[15px] font-semibold group-hover:text-accent transition-colors">{profile?.full_name || profile?.username}</p>
+                        <p className="text-xs text-muted">{formatRelativeTime(post.created_at)} · 🌐</p>
                     </div>
                 </Link>
 
                 {isOwner && (
                     <div className="relative">
-                        <button onClick={() => setShowMenu(!showMenu)} className="btn btn-ghost p-1 text-muted rounded">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
+                        <button onClick={() => setShowMenu(!showMenu)} className="btn btn-ghost p-2 rounded-full text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
                         </button>
                         {showMenu && (
-                            <div className="absolute right-0 top-7 bg-bg-tertiary rounded-md p-1 min-w-[100px] z-10 shadow-lg scale-in">
-                                <button onClick={() => { setEditing(true); setShowMenu(false); }} className="flex items-center gap-2 px-2.5 py-1.5 text-xs rounded hover:bg-surface-hover w-full text-secondary">Edit</button>
-                                <button onClick={() => { handleDelete(); setShowMenu(false); }} className="flex items-center gap-2 px-2.5 py-1.5 text-xs rounded hover:bg-danger/10 w-full text-danger">Delete</button>
+                            <div className="absolute right-0 top-9 card p-1.5 min-w-[140px] z-10 scale-in">
+                                <button onClick={() => { setEditing(true); setShowMenu(false); }} className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-surface-hover w-full">Edit post</button>
+                                <button onClick={() => { handleDelete(); setShowMenu(false); }} className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-danger/5 w-full text-danger">Delete post</button>
                             </div>
                         )}
                     </div>
@@ -60,61 +60,80 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
 
             {/* Content */}
             {editing ? (
-                <div className="mb-2 space-y-2">
-                    <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} className="input resize-none text-sm" rows={3} />
+                <div className="px-4 pb-2 space-y-2">
+                    <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} className="input resize-none text-sm" rows={3} maxLength={500} />
                     <div className="flex gap-2">
-                        <button onClick={handleEdit} className="btn btn-primary text-xs px-3 py-1">Save</button>
-                        <button onClick={() => setEditing(false)} className="btn btn-secondary text-xs px-3 py-1">Cancel</button>
+                        <button onClick={handleEdit} className="btn btn-primary text-xs px-4 py-1.5">Save</button>
+                        <button onClick={() => setEditing(false)} className="btn btn-secondary text-xs px-4 py-1.5">Cancel</button>
                     </div>
                 </div>
             ) : post.content && (
-                <p className="text-sm leading-relaxed mb-2 whitespace-pre-wrap text-secondary">{post.content}</p>
+                <p className="text-[15px] leading-relaxed px-4 pb-2 whitespace-pre-wrap">{post.content}</p>
             )}
 
             {/* Media */}
             {post.image_url && (
-                <div className="rounded-lg overflow-hidden mb-2 bg-bg-tertiary max-w-md">
+                <div className="bg-bg-tertiary border-y border-border-light">
                     {isVideoUrl(post.image_url) ? (
-                        <video src={post.image_url} className="w-full max-h-80 object-contain" controls playsInline />
+                        <video src={post.image_url} className="w-full max-h-[500px] object-contain" controls playsInline />
                     ) : (
-                        <img src={post.image_url} alt="" className="w-full max-h-80 object-cover rounded-lg" />
+                        <img src={post.image_url} alt="" className="w-full max-h-[500px] object-cover" />
                     )}
                 </div>
             )}
 
-            {/* Actions */}
-            <div className="flex items-center gap-0.5 mt-1">
-                <button onClick={handleLike} className={cn('btn btn-ghost px-2 py-1 rounded text-xs gap-1', liked && 'text-rose')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" /></svg>
-                    {likeCount > 0 && likeCount}
+            {/* Reaction counts */}
+            {(likeCount > 0 || (post.comments?.length > 0)) && (
+                <div className="flex items-center justify-between px-4 py-2 text-xs text-muted">
+                    {likeCount > 0 && (
+                        <span className="flex items-center gap-1">
+                            <span className="w-5 h-5 rounded-full bg-accent flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="white" stroke="none"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z" /></svg>
+                            </span>
+                            {likeCount}
+                        </span>
+                    )}
+                    {post.comments?.length > 0 && (
+                        <button onClick={() => setShowComments(!showComments)} className="hover:underline">
+                            {post.comments.length} comment{post.comments.length !== 1 ? 's' : ''}
+                        </button>
+                    )}
+                </div>
+            )}
+
+            {/* Actions bar — Facebook style */}
+            <div className="flex border-t border-border-light mx-4">
+                <button onClick={handleLike} className={cn('flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold transition-colors rounded-lg my-1', liked ? 'text-accent' : 'text-secondary hover:bg-surface-hover')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z" /><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" /></svg>
+                    Like
                 </button>
-                <button onClick={() => setShowComments(!showComments)} className="btn btn-ghost px-2 py-1 rounded text-xs gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
-                    {post.comments?.length > 0 && post.comments.length}
+                <button onClick={() => setShowComments(!showComments)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-secondary hover:bg-surface-hover rounded-lg my-1 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
+                    Comment
                 </button>
             </div>
 
             {/* Comments */}
             {showComments && (
-                <div className="mt-2 pt-2 border-t border-border-light slide-up">
+                <div className="px-4 pb-3 pt-1 slide-up">
                     {post.comments?.map((comment: any) => (
-                        <div key={comment.id} className="flex gap-2 mb-2 px-1">
-                            <div className="w-6 h-6 avatar text-[9px] flex-shrink-0 mt-0.5">
-                                {comment.profiles?.avatar_url ? <img src={comment.profiles.avatar_url} alt="" className="w-6 h-6 rounded-full object-cover" /> : getInitials(comment.profiles?.username || '')}
+                        <div key={comment.id} className="flex gap-2 mb-2.5">
+                            <div className="w-8 h-8 avatar text-[9px] flex-shrink-0 mt-0.5">
+                                {comment.profiles?.avatar_url ? <img src={comment.profiles.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" /> : getInitials(comment.profiles?.username || '')}
                             </div>
-                            <div>
-                                <p className="text-xs">
-                                    <span className="font-semibold text-primary">{comment.profiles?.username}</span>{' '}
-                                    <span className="text-secondary">{comment.content}</span>
-                                </p>
-                                <p className="text-[10px] text-muted mt-0.5">{formatRelativeTime(comment.created_at)}</p>
+                            <div className="flex-1">
+                                <div className="bg-surface-hover rounded-2xl px-3 py-2">
+                                    <p className="text-[13px] font-semibold">{comment.profiles?.username}</p>
+                                    <p className="text-sm">{comment.content}</p>
+                                </div>
+                                <p className="text-[11px] text-muted mt-0.5 ml-3">{formatRelativeTime(comment.created_at)}</p>
                             </div>
                         </div>
                     ))}
-                    <form onSubmit={handleComment} className="flex gap-2 mt-1">
-                        <input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment..." className="input text-xs py-1.5 flex-1" maxLength={500} />
-                        <button type="submit" disabled={!newComment.trim()} className="btn btn-primary text-xs px-2.5 py-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+                    <form onSubmit={handleComment} className="flex gap-2 mt-2">
+                        <input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." className="flex-1 bg-surface-hover rounded-full px-4 py-2 text-sm outline-none text-primary placeholder:text-muted focus:ring-2 focus:ring-accent/20" maxLength={280} />
+                        <button type="submit" disabled={!newComment.trim()} className={cn('w-8 h-8 rounded-full flex items-center justify-center transition-all', newComment.trim() ? 'bg-accent text-white' : 'bg-bg-tertiary text-muted')}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
                         </button>
                     </form>
                 </div>
