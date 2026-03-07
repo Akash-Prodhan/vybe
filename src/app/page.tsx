@@ -265,8 +265,9 @@ export default async function Home() {
         </div>
       </footer>
 
-      {/* ===== INLINE CSS FOR ANIMATIONS ===== */}
+      {/* ===== INLINE CSS FOR ANIMATIONS + HOVER EFFECTS ===== */}
       <style>{`
+        /* === INFINITE BOUNCE === */
         @keyframes infiniteBounce {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-6px); }
@@ -277,14 +278,159 @@ export default async function Home() {
         .infinite-bounce:nth-child(2) { animation-delay: 0.3s; }
         .infinite-bounce:nth-child(3) { animation-delay: 0.6s; }
 
+        /* === PULSE GLOW on CTA === */
         @keyframes pulseGlow {
           0%, 100% { box-shadow: 0 6px 24px rgba(118,22,243,0.35); }
           50% { box-shadow: 0 8px 40px rgba(118,22,243,0.55); }
         }
         .pulse-glow {
           animation: pulseGlow 2s ease-in-out infinite;
+          position: relative;
+          overflow: hidden;
         }
 
+        /* === SHIMMER SWEEP on purple buttons === */
+        .pulse-glow::before {
+          content: '';
+          position: absolute;
+          top: 0; left: -100%; width: 60%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+          transform: skewX(-20deg);
+          transition: none;
+        }
+        .pulse-glow:hover::before {
+          animation: shimmerSweep 0.8s ease forwards;
+        }
+        @keyframes shimmerSweep {
+          0% { left: -100%; }
+          100% { left: 150%; }
+        }
+        .pulse-glow:hover {
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 12px 48px rgba(118,22,243,0.5) !important;
+        }
+
+        /* === OUTLINE BUTTON hover glow === */
+        a[href="/login"]:not([style*="background: linear"]) {
+          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        a[href="/login"]:not([style*="background: linear"]):hover {
+          background: rgba(118,22,243,0.06) !important;
+          border-color: #7616f3 !important;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 20px rgba(118,22,243,0.15);
+        }
+
+        /* === NAV LINK hover effects === */
+        a[href^="#"] {
+          transition: all 200ms ease !important;
+          position: relative;
+        }
+        a[href^="#"]:hover {
+          color: #7616f3 !important;
+          transform: translateY(-1px);
+        }
+        a[href^="#"]::after {
+          content: '';
+          position: absolute;
+          bottom: -4px; left: 0;
+          width: 0; height: 2px;
+          background: linear-gradient(90deg, #7616f3, #1877f2);
+          border-radius: 1px;
+          transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        a[href^="#"]:hover::after {
+          width: 100%;
+        }
+
+        /* === NAV Create Account button hover === */
+        a[href="/signup"][style*="linear-gradient"] {
+          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+          position: relative !important;
+          overflow: hidden !important;
+        }
+        a[href="/signup"][style*="linear-gradient"]:hover {
+          transform: translateY(-2px) scale(1.04) !important;
+          box-shadow: 0 8px 32px rgba(118,22,243,0.45) !important;
+        }
+
+        /* === FEATURE CARD 3D TILT + GLOW === */
+        .hover-lift {
+          transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+          cursor: pointer;
+          position: relative;
+        }
+        .hover-lift::before {
+          content: '';
+          position: absolute;
+          inset: -1px;
+          border-radius: 21px;
+          background: linear-gradient(135deg, rgba(118,22,243,0.3), rgba(24,119,242,0.3), rgba(240,40,73,0.2));
+          opacity: 0;
+          transition: opacity 400ms ease;
+          z-index: -1;
+          filter: blur(1px);
+        }
+        .hover-lift:hover::before {
+          opacity: 1;
+        }
+        .hover-lift:hover {
+          transform: translateY(-8px) scale(1.02) !important;
+          box-shadow: 0 20px 60px rgba(118,22,243,0.12), 0 8px 24px rgba(0,0,0,0.06) !important;
+          border-color: rgba(118,22,243,0.2) !important;
+        }
+        .hover-lift:hover .infinite-bounce {
+          animation: none !important;
+          transform: scale(1.15) rotate(-5deg);
+          transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .hover-lift:hover h3 {
+          background: linear-gradient(135deg, #7616f3, #1877f2);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          transition: all 300ms ease;
+        }
+
+        /* === TRUST BADGE hover pop === */
+        section#privacy .infinite-bounce {
+          transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+          cursor: pointer;
+        }
+        section#privacy .infinite-bounce:hover {
+          animation-play-state: paused !important;
+          transform: translateY(-4px) scale(1.08) !important;
+          background: rgba(118,22,243,0.08) !important;
+          border-color: rgba(118,22,243,0.2) !important;
+          box-shadow: 0 8px 24px rgba(118,22,243,0.1);
+        }
+        section#privacy .infinite-bounce:hover span:first-child {
+          transform: scale(1.3);
+          transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+          display: inline-block;
+        }
+
+        /* === FOOTER LINK underline slide === */
+        footer a {
+          position: relative !important;
+          transition: color 200ms ease !important;
+        }
+        footer a:hover {
+          color: #7616f3 !important;
+        }
+        footer a::after {
+          content: '';
+          position: absolute;
+          bottom: -2px; left: 50%;
+          width: 0; height: 1.5px;
+          background: #7616f3;
+          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateX(-50%);
+        }
+        footer a:hover::after {
+          width: 100%;
+        }
+
+        /* === RESPONSIVE === */
         @media (max-width: 768px) {
           nav { padding: 16px 20px !important; }
           nav > div:first-of-type > div:first-child { display: none !important; }
