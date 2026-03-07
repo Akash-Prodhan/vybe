@@ -40,11 +40,15 @@ export default async function Home() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           <div style={{ display: 'flex', gap: '28px' }}>
-            {['Features', 'Privacy', 'Community'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} style={{
+            {[
+              { label: 'Features', href: '/features' },
+              { label: 'Privacy', href: '/privacy-security' },
+              { label: 'Community', href: '/community' },
+            ].map(item => (
+              <Link key={item.label} href={item.href} style={{
                 fontSize: '14px', fontWeight: 500, color: '#606770',
                 textDecoration: 'none', transition: 'color 200ms',
-              }}>{item}</a>
+              }}>{item.label}</Link>
             ))}
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
