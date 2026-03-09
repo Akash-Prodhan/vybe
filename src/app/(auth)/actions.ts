@@ -99,7 +99,9 @@ export async function forgotPassword(formData: FormData) {
 export async function signInWithGoogle() {
     const supabase = await createClient();
     const headersList = await headers();
-    const origin = headersList.get('origin') || 'http://localhost:3000';
+    const host = headersList.get('host');
+    const protocol = host?.includes('localhost') || host?.includes('127.0.0.1') ? 'http' : 'https';
+    const origin = host ? `${protocol}://${host}` : 'http://localhost:3000';
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

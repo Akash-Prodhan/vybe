@@ -3,7 +3,14 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Navbar } from '@/components/landing/Navbar';
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: { code?: string, error?: string } }) {
+  if (searchParams?.code) {
+    redirect(`/auth/callback?code=${searchParams.code}`);
+  }
+  if (searchParams?.error) {
+    redirect(`/login?error=${searchParams.error}`);
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
