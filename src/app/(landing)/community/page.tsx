@@ -65,7 +65,7 @@ export default function CommunityPage() {
             <section className="fade-in" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px 60px', position: 'relative', zIndex: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
                     {steps.map((s, i) => (
-                        <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                        <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '24px' }}>
                             <div className="hover-lift" style={{ textAlign: 'center', width: '220px', transition: 'all 300ms' }}>
                                 <div className="infinite-bounce" style={{ width: '56px', height: '56px', borderRadius: '50%', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 800, color: 'white', margin: '0 auto 12px', boxShadow: `0 4px 16px ${s.color}40` }}>{s.num}</div>
                                 <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>{s.title}</h3>
@@ -161,8 +161,21 @@ export default function CommunityPage() {
         .hover-lift { transition: all 400ms cubic-bezier(0.4,0,0.2,1) !important; cursor: pointer; }
         .hover-lift:hover { transform: translateY(-6px) scale(1.02) !important; box-shadow: 0 16px 48px rgba(118,22,243,0.1) !important; }
         @media (max-width: 768px) {
-          nav > div:first-of-type > div:first-child { display: none !important; }
+          nav { padding: 12px 16px !important; }
+          nav > div { gap: 12px !important; }
+          nav > div > div:first-child { display: none !important; }
+          nav > div > div:last-child { gap: 8px !important; }
+          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+          h1 { font-size: 24px !important; }
+          h2 { font-size: 20px !important; }
           div[style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+          div[style*="gap: '48px'"] { gap: 16px !important; flex-wrap: wrap !important; }
+          div[style*="gap: '24px'"][style*="flex"] { flex-wrap: wrap !important; }
+          div[style*="padding: '56px 48px'"],
+          div[style*="padding: '48px'"] { padding: 24px 16px !important; }
+          div[style*="gap: '14px'"][style*="flex-wrap"] { flex-direction: column !important; }
+          div[style*="gap: '14px'"][style*="flex-wrap"] a { width: 100% !important; text-align: center !important; }
         }
       `}</style>
         </div>

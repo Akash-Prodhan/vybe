@@ -436,13 +436,20 @@ export default async function Home() {
 
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
-          nav { padding: 16px 20px !important; }
-          nav > div:first-of-type > div:first-child { display: none !important; }
-          section[style*="gridTemplateColumns: repeat(3"] > div,
-          div[style*="gridTemplateColumns: repeat(3"] {
-            grid-template-columns: 1fr !important;
-          }
-          h1 { font-size: 36px !important; }
+          nav { padding: 12px 16px !important; gap: 8px !important; }
+          nav > div { gap: 12px !important; }
+          nav > div > div:first-child { display: none !important; }
+          nav > div > div:last-child { gap: 8px !important; }
+          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+          h1 { font-size: 28px !important; letter-spacing: -0.5px !important; }
+          h2 { font-size: 22px !important; }
+          div[style*="gridTemplateColumns: repeat(3"] { grid-template-columns: 1fr !important; }
+          div[style*="gap: 48px"] { gap: 20px !important; flex-wrap: wrap !important; justify-content: center !important; }
+          div[style*="gap: 48px"] > div { min-width: 80px !important; }
+          div[style*="gap: 48px"] p[style*="fontSize: '40px'"] { font-size: 28px !important; }
+          div[style*="padding: '56px 48px'"] { padding: 32px 20px !important; }
+          div[style*="padding: '48px'"] { padding: 24px 16px !important; }
         }
       `}</style>
     </div>

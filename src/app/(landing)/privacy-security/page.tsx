@@ -124,9 +124,19 @@ export default function PrivacySecurityPage() {
         .hover-lift { transition: all 400ms cubic-bezier(0.4,0,0.2,1) !important; cursor: pointer; }
         .hover-lift:hover { transform: translateY(-6px) scale(1.02) !important; box-shadow: 0 16px 48px rgba(118,22,243,0.1) !important; }
         @media (max-width: 768px) {
-          nav > div:first-of-type > div:first-child { display: none !important; }
+          nav { padding: 12px 16px !important; }
+          nav > div { gap: 12px !important; }
+          nav > div > div:first-child { display: none !important; }
+          nav > div > div:last-child { gap: 8px !important; }
+          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+          h1 { font-size: 26px !important; }
+          h2 { font-size: 22px !important; }
           div[style*="repeat(3"] { grid-template-columns: 1fr !important; }
           div[style*="repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+          div[style*="padding: '56px 48px'"],
+          div[style*="padding: '48px 40px'"] { padding: 24px 16px !important; }
+          div[style*="gap: '12px'"] { flex-wrap: wrap !important; }
         }
       `}</style>
         </div>

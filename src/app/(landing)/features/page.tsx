@@ -154,9 +154,17 @@ export default function FeaturesPage() {
         .hover-lift:hover .infinite-bounce { animation: none !important; transform: scale(1.15) rotate(-5deg); transition: transform 300ms cubic-bezier(0.34,1.56,0.64,1); }
         .hover-lift:hover h3 { background: linear-gradient(135deg, #7616f3, #1877f2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         @media (max-width: 768px) {
-          nav > div:first-of-type > div:first-child { display: none !important; }
+          nav { padding: 12px 16px !important; }
+          nav > div { gap: 12px !important; }
+          nav > div > div:first-child { display: none !important; }
+          nav > div > div:last-child { gap: 8px !important; }
+          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+          h1 { font-size: 26px !important; }
+          h2 { font-size: 22px !important; }
           div[style*="gridTemplateColumns: repeat(2"] { grid-template-columns: 1fr !important; }
-          h1 { font-size: 32px !important; }
+          div[style*="padding: '56px 48px'"] { padding: 28px 20px !important; }
+          div[style*="padding: '32px 28px'"] { padding: 24px 16px !important; }
         }
       `}</style>
         </div>
