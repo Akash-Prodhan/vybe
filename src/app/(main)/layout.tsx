@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
 import BottomNav from '@/components/layout/BottomNav';
+import SidebarSpacer from '@/components/layout/SidebarSpacer';
 
 export default async function MainLayout({
     children,
@@ -18,6 +19,7 @@ export default async function MainLayout({
     return (
         <div className="flex min-h-screen bg-bg">
             <Sidebar />
+            <SidebarSpacer />
             <main className="flex-1 min-h-screen pb-16 md:pb-0">
                 {children}
             </main>
