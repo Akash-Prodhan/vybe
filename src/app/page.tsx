@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import { Navbar } from '@/components/landing/Navbar';
 
 export default async function Home() {
   const supabase = await createClient();
@@ -25,50 +26,7 @@ export default async function Home() {
       <div style={{ position: 'absolute', bottom: '-200px', left: '30%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(240,40,73,0.05) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
       {/* ===== NAVBAR ===== */}
-      <nav className="mobile-nav" style={{
-        position: 'relative', zIndex: 10,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '16px 48px',
-        maxWidth: '1280px', margin: '0 auto',
-      }}>
-        <Link href="/" style={{
-          fontSize: '28px', fontWeight: 800,
-          background: 'linear-gradient(135deg, #7616f3, #1877f2)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          textDecoration: 'none',
-        }}>Vybe</Link>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-          <div className="mobile-nav-links" style={{ display: 'flex', gap: '28px' }}>
-            {[
-              { label: 'Features', href: '/features' },
-              { label: 'Privacy', href: '/privacy-security' },
-              { label: 'Community', href: '/community' },
-            ].map(item => (
-              <Link key={item.label} href={item.href} style={{
-                fontSize: '14px', fontWeight: 500, color: '#606770',
-                textDecoration: 'none', transition: 'color 200ms',
-              }}>{item.label}</Link>
-            ))}
-          </div>
-          <div className="mobile-nav-btns" style={{ display: 'flex', gap: '12px' }}>
-            <Link href="/login" style={{
-              padding: '10px 24px', fontSize: '14px', fontWeight: 600,
-              color: '#7616f3', border: '1.5px solid #7616f3',
-              borderRadius: '12px', textDecoration: 'none',
-              transition: 'all 200ms',
-              background: 'transparent',
-            }}>Log In</Link>
-            <Link href="/signup" style={{
-              padding: '10px 24px', fontSize: '14px', fontWeight: 600,
-              color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)',
-              borderRadius: '12px', textDecoration: 'none',
-              boxShadow: '0 4px 16px rgba(118,22,243,0.3)',
-              transition: 'all 200ms', border: 'none',
-            }}>Create Account</Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ===== HERO SECTION ===== */}
       <section className="fade-in" style={{
