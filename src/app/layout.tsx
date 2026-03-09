@@ -5,6 +5,12 @@ import ThemeProvider from "@/components/ThemeProvider";
 export const metadata: Metadata = {
   title: "Vybe — Connect, Share, Chat",
   description: "A modern social platform for sharing moments, stories, and connecting with people in real-time.",
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
