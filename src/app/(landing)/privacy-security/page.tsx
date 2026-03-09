@@ -1,6 +1,11 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function PrivacySecurityPage() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     const pillars = [
         {
             icon: '🔒', title: 'Row-Level Security', gradient: 'linear-gradient(135deg, #00a884, #00c49a)',
@@ -28,20 +33,36 @@ export default function PrivacySecurityPage() {
             <div style={{ position: 'absolute', top: '-200px', left: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(0,168,132,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: '-200px', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(118,22,243,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-            <nav style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 48px', maxWidth: '1280px', margin: '0 auto' }}>
+            <nav className="mobile-nav" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 48px', maxWidth: '1280px', margin: '0 auto' }}>
                 <Link href="/" style={{ fontSize: '28px', fontWeight: 800, background: 'linear-gradient(135deg, #7616f3, #1877f2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>Vybe</Link>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-                    <div style={{ display: 'flex', gap: '28px' }}>
+                <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                    <div className="mobile-nav-links" style={{ display: 'flex', gap: '28px' }}>
                         <Link href="/features" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Features</Link>
                         <Link href="/privacy-security" style={{ fontSize: '14px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', borderBottom: '2px solid #7616f3', paddingBottom: '4px' }}>Privacy</Link>
                         <Link href="/community" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Community</Link>
                     </div>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="mobile-nav-btns" style={{ display: 'flex', gap: '12px' }}>
                         <Link href="/login" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none' }}>Log In</Link>
                         <Link href="/signup" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
                     </div>
                 </div>
+                <button className="mobile-hamburger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ display: 'none', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#1c1e21' }}>
+                    {isMobileMenuOpen ? '✕' : '☰'}
+                </button>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="mobile-menu-overlay" style={{ position: 'absolute', top: '70px', left: 0, right: 0, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(10px)', zIndex: 100, padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', borderBottom: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                    <Link href="/features" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Features</Link>
+                    <Link href="/privacy-security" style={{ fontSize: '16px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Privacy</Link>
+                    <Link href="/community" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Community</Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                        <Link href="/login" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none', textAlign: 'center' }}>Log In</Link>
+                        <Link href="/signup" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
+                    </div>
+                </div>
+            )}
 
             <section className="fade-in" style={{ position: 'relative', zIndex: 10, textAlign: 'center', maxWidth: '800px', margin: '0 auto', padding: '60px 24px 20px' }}>
                 <div className="infinite-bounce" style={{ fontSize: '64px', marginBottom: '20px' }}>🛡️</div>
@@ -57,7 +78,7 @@ export default function PrivacySecurityPage() {
             </section>
 
             <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '60px 24px', position: 'relative', zIndex: 10 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+                <div className="mobile-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
                     {pillars.map((p, i) => (
                         <div key={p.title} className={`fade-in stagger-${i + 1} hover-lift`} style={{ ...glass, padding: '32px 24px', transition: 'all 300ms' }}>
                             <div className="infinite-bounce" style={{ width: '56px', height: '56px', background: p.gradient, borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', marginBottom: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>{p.icon}</div>
@@ -75,7 +96,7 @@ export default function PrivacySecurityPage() {
                 <div style={{ ...glass, borderRadius: '24px', padding: '48px 40px' }}>
                     <h2 style={{ fontSize: '28px', fontWeight: 800, textAlign: 'center', marginBottom: '8px' }}>Complete Data Control</h2>
                     <p style={{ fontSize: '15px', color: '#606770', textAlign: 'center', marginBottom: '36px' }}>Your information, your rules.</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+                    <div className="mobile-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
                         {controls.map(d => (
                             <div key={d.title} className="hover-lift" style={{ textAlign: 'center', padding: '20px 12px', borderRadius: '16px', background: 'rgba(118,22,243,0.03)', border: '1px solid rgba(118,22,243,0.06)', transition: 'all 300ms' }}>
                                 <div className="infinite-bounce" style={{ fontSize: '32px', marginBottom: '12px' }}>{d.icon}</div>
@@ -88,7 +109,7 @@ export default function PrivacySecurityPage() {
             </section>
 
             <section className="fade-in" style={{ maxWidth: '700px', margin: '0 auto', padding: '0 24px 60px', position: 'relative', zIndex: 10 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+                <div className="mobile-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
                     {['GDPR', 'CCPA', 'SOC 2', 'ISO 27001'].map(c => (
                         <div key={c} className="hover-lift" style={{ ...glass, borderRadius: '14px', padding: '20px 12px', textAlign: 'center', transition: 'all 300ms' }}>
                             <span style={{ fontSize: '20px', display: 'block', marginBottom: '6px' }}>✅</span>
@@ -99,7 +120,7 @@ export default function PrivacySecurityPage() {
             </section>
 
             <section className="fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-                <div style={{ ...glass, borderRadius: '24px', padding: '56px 48px', textAlign: 'center' }}>
+                <div className="mobile-card-lg" style={{ ...glass, borderRadius: '24px', padding: '56px 48px', textAlign: 'center' }}>
                     <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '12px' }}>Privacy shouldn&apos;t be a premium feature.</h2>
                     <p style={{ fontSize: '16px', color: '#606770', marginBottom: '28px' }}>Join thousands who trust Vybe for secure social interactions.</p>
                     <Link href="/signup" className="pulse-glow" style={{ display: 'inline-block', padding: '14px 36px', fontSize: '16px', fontWeight: 700, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '14px', textDecoration: 'none', boxShadow: '0 6px 24px rgba(118,22,243,0.35)' }}>Create Secure Account →</Link>
@@ -124,11 +145,9 @@ export default function PrivacySecurityPage() {
         .hover-lift { transition: all 400ms cubic-bezier(0.4,0,0.2,1) !important; cursor: pointer; }
         .hover-lift:hover { transform: translateY(-6px) scale(1.02) !important; box-shadow: 0 16px 48px rgba(118,22,243,0.1) !important; }
         @media (max-width: 768px) {
-          nav { padding: 12px 16px !important; }
-          nav > div { gap: 12px !important; }
-          nav > div > div:first-child { display: none !important; }
-          nav > div > div:last-child { gap: 8px !important; }
-          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          nav { padding: 16px 24px !important; }
+          .desktop-nav { display: none !important; }
+          .mobile-hamburger { display: block !important; }
           section { padding-left: 16px !important; padding-right: 16px !important; }
           h1 { font-size: 26px !important; }
           h2 { font-size: 22px !important; }

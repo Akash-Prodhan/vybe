@@ -1,6 +1,11 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function FeaturesPage() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     const features = [
         {
             icon: '🔐', title: 'Encrypted Chat', gradient: 'linear-gradient(135deg, #00a884, #00c49a)',
@@ -46,24 +51,40 @@ export default function FeaturesPage() {
             <div style={{ position: 'absolute', bottom: '-200px', left: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(24,119,242,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
             {/* Navbar */}
-            <nav style={{
+            <nav className="mobile-nav" style={{
                 position: 'relative', zIndex: 10,
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '16px 48px', maxWidth: '1280px', margin: '0 auto',
             }}>
                 <Link href="/" style={{ fontSize: '28px', fontWeight: 800, background: 'linear-gradient(135deg, #7616f3, #1877f2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>Vybe</Link>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-                    <div style={{ display: 'flex', gap: '28px' }}>
+                <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                    <div className="mobile-nav-links" style={{ display: 'flex', gap: '28px' }}>
                         <Link href="/features" style={{ fontSize: '14px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', borderBottom: '2px solid #7616f3', paddingBottom: '4px' }}>Features</Link>
                         <Link href="/privacy-security" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Privacy</Link>
                         <Link href="/community" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Community</Link>
                     </div>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="mobile-nav-btns" style={{ display: 'flex', gap: '12px' }}>
                         <Link href="/login" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none', background: 'transparent' }}>Log In</Link>
                         <Link href="/signup" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
                     </div>
                 </div>
+                <button className="mobile-hamburger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ display: 'none', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#1c1e21' }}>
+                    {isMobileMenuOpen ? '✕' : '☰'}
+                </button>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="mobile-menu-overlay" style={{ position: 'absolute', top: '70px', left: 0, right: 0, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(10px)', zIndex: 100, padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', borderBottom: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                    <Link href="/features" style={{ fontSize: '16px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Features</Link>
+                    <Link href="/privacy-security" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Privacy</Link>
+                    <Link href="/community" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Community</Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                        <Link href="/login" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none', textAlign: 'center' }}>Log In</Link>
+                        <Link href="/signup" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
+                    </div>
+                </div>
+            )}
 
             {/* Hero */}
             <section className="fade-in" style={{ position: 'relative', zIndex: 10, textAlign: 'center', maxWidth: '800px', margin: '0 auto', padding: '60px 24px 20px' }}>
@@ -81,7 +102,7 @@ export default function FeaturesPage() {
 
             {/* Feature Grid */}
             <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '48px 24px 80px', position: 'relative', zIndex: 10 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
+                <div className="mobile-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
                     {features.map((f, i) => (
                         <div key={f.title} className={`fade-in stagger-${(i % 4) + 1} hover-lift`} style={{
                             background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)',
@@ -110,7 +131,7 @@ export default function FeaturesPage() {
 
             {/* Bottom CTA */}
             <section className="fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-                <div style={{
+                <div className="mobile-card-lg" style={{
                     background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)',
                     border: '1px solid rgba(255,255,255,0.5)', borderRadius: '24px', padding: '56px 48px',
                     boxShadow: '0 8px 40px rgba(0,0,0,0.06)', textAlign: 'center',
@@ -154,11 +175,9 @@ export default function FeaturesPage() {
         .hover-lift:hover .infinite-bounce { animation: none !important; transform: scale(1.15) rotate(-5deg); transition: transform 300ms cubic-bezier(0.34,1.56,0.64,1); }
         .hover-lift:hover h3 { background: linear-gradient(135deg, #7616f3, #1877f2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         @media (max-width: 768px) {
-          nav { padding: 12px 16px !important; }
-          nav > div { gap: 12px !important; }
-          nav > div > div:first-child { display: none !important; }
-          nav > div > div:last-child { gap: 8px !important; }
-          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          nav { padding: 16px 24px !important; }
+          .desktop-nav { display: none !important; }
+          .mobile-hamburger { display: block !important; }
           section { padding-left: 16px !important; padding-right: 16px !important; }
           h1 { font-size: 26px !important; }
           h2 { font-size: 22px !important; }

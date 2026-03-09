@@ -35,7 +35,7 @@ export default function LoginPage() {
             <div style={{ position: 'absolute', bottom: '-150px', right: '-150px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(24,119,242,0.07) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', top: '40%', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(240,40,73,0.05) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-            <div className="fade-in" style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '420px', margin: '0 16px' }}>
+            <div className="fade-in" style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '420px', padding: '0 16px' }}>
                 {/* Logo */}
                 <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                     <Link href="/" className="infinite-bounce" style={{

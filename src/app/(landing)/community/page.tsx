@@ -1,6 +1,11 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function CommunityPage() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     const stats = [
         { val: '10K+', label: 'Active Users' }, { val: '50K+', label: 'Messages Daily' },
         { val: '2K+', label: 'Groups Created' }, { val: '99.9%', label: 'Uptime SLA' },
@@ -27,20 +32,36 @@ export default function CommunityPage() {
             <div style={{ position: 'absolute', top: '-200px', right: '-150px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(240,40,73,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: '-200px', left: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(118,22,243,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-            <nav style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 48px', maxWidth: '1280px', margin: '0 auto' }}>
+            <nav className="mobile-nav" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 48px', maxWidth: '1280px', margin: '0 auto' }}>
                 <Link href="/" style={{ fontSize: '28px', fontWeight: 800, background: 'linear-gradient(135deg, #7616f3, #1877f2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>Vybe</Link>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-                    <div style={{ display: 'flex', gap: '28px' }}>
+                <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                    <div className="mobile-nav-links" style={{ display: 'flex', gap: '28px' }}>
                         <Link href="/features" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Features</Link>
                         <Link href="/privacy-security" style={{ fontSize: '14px', fontWeight: 500, color: '#606770', textDecoration: 'none' }}>Privacy</Link>
                         <Link href="/community" style={{ fontSize: '14px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', borderBottom: '2px solid #7616f3', paddingBottom: '4px' }}>Community</Link>
                     </div>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="mobile-nav-btns" style={{ display: 'flex', gap: '12px' }}>
                         <Link href="/login" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none' }}>Log In</Link>
                         <Link href="/signup" style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
                     </div>
                 </div>
+                <button className="mobile-hamburger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ display: 'none', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#1c1e21' }}>
+                    {isMobileMenuOpen ? '✕' : '☰'}
+                </button>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="mobile-menu-overlay" style={{ position: 'absolute', top: '70px', left: 0, right: 0, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(10px)', zIndex: 100, padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', borderBottom: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                    <Link href="/features" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Features</Link>
+                    <Link href="/privacy-security" style={{ fontSize: '16px', fontWeight: 600, color: '#1c1e21', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Privacy</Link>
+                    <Link href="/community" style={{ fontSize: '16px', fontWeight: 600, color: '#7616f3', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>Community</Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                        <Link href="/login" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: '#7616f3', border: '1.5px solid #7616f3', borderRadius: '12px', textDecoration: 'none', textAlign: 'center' }}>Log In</Link>
+                        <Link href="/signup" style={{ padding: '12px 24px', fontSize: '15px', fontWeight: 600, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '12px', textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(118,22,243,0.3)' }}>Create Account</Link>
+                    </div>
+                </div>
+            )}
 
             {/* Hero */}
             <section className="fade-in" style={{ position: 'relative', zIndex: 10, textAlign: 'center', maxWidth: '800px', margin: '0 auto', padding: '60px 24px 20px' }}>
@@ -52,10 +73,10 @@ export default function CommunityPage() {
             </section>
 
             {/* Stats */}
-            <section className="fade-in" style={{ display: 'flex', justifyContent: 'center', gap: '48px', padding: '40px 24px 60px', maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 10, flexWrap: 'wrap' }}>
+            <section className="fade-in mobile-stats mobile-section" style={{ display: 'flex', justifyContent: 'center', gap: '48px', padding: '40px 24px 60px', maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 10, flexWrap: 'wrap' }}>
                 {stats.map(s => (
                     <div key={s.label} className="infinite-bounce" style={{ textAlign: 'center' }}>
-                        <p style={{ fontSize: '40px', fontWeight: 800, lineHeight: 1, background: 'linear-gradient(135deg, #7616f3, #1877f2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.val}</p>
+                        <p className="mobile-stat-val" style={{ fontSize: '40px', fontWeight: 800, lineHeight: 1, background: 'linear-gradient(135deg, #7616f3, #1877f2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.val}</p>
                         <p style={{ fontSize: '13px', color: '#8a8d91', marginTop: '6px', fontWeight: 500 }}>{s.label}</p>
                     </div>
                 ))}
@@ -63,15 +84,15 @@ export default function CommunityPage() {
 
             {/* How It Works */}
             <section className="fade-in" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px 60px', position: 'relative', zIndex: 10 }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
+                <div className="mobile-steps" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
                     {steps.map((s, i) => (
-                        <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '24px' }}>
+                        <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: '24px', }}>
                             <div className="hover-lift" style={{ textAlign: 'center', width: '220px', transition: 'all 300ms' }}>
                                 <div className="infinite-bounce" style={{ width: '56px', height: '56px', borderRadius: '50%', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 800, color: 'white', margin: '0 auto 12px', boxShadow: `0 4px 16px ${s.color}40` }}>{s.num}</div>
                                 <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>{s.title}</h3>
                                 <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#606770' }}>{s.desc}</p>
                             </div>
-                            {i < 2 && <div style={{ width: '40px', borderTop: '2px dashed #d1d5db', marginTop: '28px' }} />}
+                            {i < 2 && <div className="mobile-step-divider" style={{ width: '40px', borderTop: '2px dashed #d1d5db', marginTop: '28px' }} />}
                         </div>
                     ))}
                 </div>
@@ -79,7 +100,7 @@ export default function CommunityPage() {
 
             {/* Testimonials + Groups */}
             <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px 60px', position: 'relative', zIndex: 10 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+                <div className="mobile-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
                     {/* Testimonials */}
                     <div>
                         <h2 className="fade-in" style={{ fontSize: '22px', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>💬 Community Voices</h2>
@@ -118,7 +139,7 @@ export default function CommunityPage() {
 
             {/* Open Source */}
             <section className="fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 60px', position: 'relative', zIndex: 10 }}>
-                <div style={{ ...glass, borderRadius: '24px', padding: '48px', textAlign: 'center' }}>
+                <div className="mobile-card-lg" style={{ ...glass, borderRadius: '24px', padding: '48px', textAlign: 'center' }}>
                     <div className="infinite-bounce" style={{ fontSize: '40px', marginBottom: '16px' }}>🌐</div>
                     <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '10px' }}>Open Source & Transparent</h2>
                     <p style={{ fontSize: '15px', color: '#606770', marginBottom: '24px', maxWidth: '500px', margin: '0 auto 24px' }}>We believe in building in public. All our core infrastructure is open to the community for contribution and audit.</p>
@@ -131,10 +152,10 @@ export default function CommunityPage() {
 
             {/* Bottom CTA */}
             <section className="fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-                <div style={{ ...glass, borderRadius: '24px', padding: '56px 48px', textAlign: 'center' }}>
+                <div className="mobile-card-lg" style={{ ...glass, borderRadius: '24px', padding: '56px 48px', textAlign: 'center' }}>
                     <h2 style={{ fontSize: '30px', fontWeight: 800, marginBottom: '10px' }}>Be Part of Something Real</h2>
                     <p style={{ fontSize: '16px', color: '#606770', marginBottom: '28px' }}>No ads. No algorithms. Just people.</p>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                    <div className="mobile-cta-stack" style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
                         <Link href="/signup" className="pulse-glow" style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 700, color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)', borderRadius: '14px', textDecoration: 'none', boxShadow: '0 6px 24px rgba(118,22,243,0.35)' }}>Join the Community →</Link>
                         <Link href="/features" style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 600, color: '#7616f3', border: '2px solid rgba(118,22,243,0.25)', borderRadius: '14px', textDecoration: 'none', background: 'rgba(255,255,255,0.6)' }}>Explore Features</Link>
                     </div>
@@ -161,11 +182,9 @@ export default function CommunityPage() {
         .hover-lift { transition: all 400ms cubic-bezier(0.4,0,0.2,1) !important; cursor: pointer; }
         .hover-lift:hover { transform: translateY(-6px) scale(1.02) !important; box-shadow: 0 16px 48px rgba(118,22,243,0.1) !important; }
         @media (max-width: 768px) {
-          nav { padding: 12px 16px !important; }
-          nav > div { gap: 12px !important; }
-          nav > div > div:first-child { display: none !important; }
-          nav > div > div:last-child { gap: 8px !important; }
-          nav > div > div:last-child a { padding: 8px 14px !important; font-size: 12px !important; }
+          nav { padding: 16px 24px !important; }
+          .desktop-nav { display: none !important; }
+          .mobile-hamburger { display: block !important; }
           section { padding-left: 16px !important; padding-right: 16px !important; }
           h1 { font-size: 24px !important; }
           h2 { font-size: 20px !important; }

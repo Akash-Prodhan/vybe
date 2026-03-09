@@ -44,7 +44,7 @@ export default function SignupPage() {
             position: 'relative', overflow: 'hidden',
         }}>
             {/* LEFT: Branding Panel */}
-            <div style={{
+            <div className="mobile-hide" style={{
                 width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center',
                 padding: '64px',
                 background: 'linear-gradient(135deg, #7616f3 0%, #5a10d0 50%, #1877f2 100%)',
@@ -88,7 +88,7 @@ export default function SignupPage() {
             </div>
 
             {/* RIGHT: Form Panel */}
-            <div style={{
+            <div className="mobile-full mobile-page" style={{
                 width: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '32px',
                 background: 'linear-gradient(165deg, #f0f0ff 0%, #f8f5ff 30%, #fdf5f5 60%, #f0f0ff 100%)',

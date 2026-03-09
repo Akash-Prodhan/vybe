@@ -25,7 +25,7 @@ export default async function Home() {
       <div style={{ position: 'absolute', bottom: '-200px', left: '30%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(240,40,73,0.05) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
       {/* ===== NAVBAR ===== */}
-      <nav style={{
+      <nav className="mobile-nav" style={{
         position: 'relative', zIndex: 10,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '16px 48px',
@@ -39,7 +39,7 @@ export default async function Home() {
         }}>Vybe</Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-          <div style={{ display: 'flex', gap: '28px' }}>
+          <div className="mobile-nav-links" style={{ display: 'flex', gap: '28px' }}>
             {[
               { label: 'Features', href: '/features' },
               { label: 'Privacy', href: '/privacy-security' },
@@ -51,7 +51,7 @@ export default async function Home() {
               }}>{item.label}</Link>
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="mobile-nav-btns" style={{ display: 'flex', gap: '12px' }}>
             <Link href="/login" style={{
               padding: '10px 24px', fontSize: '14px', fontWeight: 600,
               color: '#7616f3', border: '1.5px solid #7616f3',
@@ -107,7 +107,7 @@ export default async function Home() {
           Experience a new era of social interaction on Vybe. Built with clarity for connection and impact for creators.
         </p>
 
-        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="mobile-cta-stack" style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/signup" className="pulse-glow" style={{
             padding: '14px 36px', fontSize: '16px', fontWeight: 700,
             color: 'white', background: 'linear-gradient(135deg, #7616f3, #5a10d0)',
@@ -130,11 +130,11 @@ export default async function Home() {
       </section>
 
       {/* ===== STATS ROW ===== */}
-      <section className="fade-in stagger-1" style={{
+      <section className="fade-in stagger-1 mobile-stats mobile-section" style={{
         display: 'flex', justifyContent: 'center', gap: '80px',
         padding: '40px 24px 60px',
         maxWidth: '700px', margin: '0 auto',
-        position: 'relative', zIndex: 10,
+        position: 'relative', zIndex: 10, flexWrap: 'wrap',
       }}>
         {[
           { val: '100%', label: 'Free Forever' },
@@ -167,7 +167,7 @@ export default async function Home() {
           marginBottom: '48px', maxWidth: '500px', margin: '0 auto 48px',
         }}>Everything you need to connect, create, and grow your community.</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+        <div className="mobile-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
           {[
             {
               icon: '🔐', title: 'Encrypted Chat', gradient: 'linear-gradient(135deg, #00a884, #00c49a)',
@@ -214,7 +214,7 @@ export default async function Home() {
         padding: '0 24px 80px',
         position: 'relative', zIndex: 10,
       }}>
-        <div style={{
+        <div className="mobile-card-lg" style={{
           background: 'rgba(255,255,255,0.7)',
           backdropFilter: 'blur(24px) saturate(180%)',
           WebkitBackdropFilter: 'blur(24px) saturate(180%)',
@@ -231,7 +231,7 @@ export default async function Home() {
             We believe your data is your property. Our platform is architected around security from the ground up.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', maxWidth: '600px', margin: '0 auto' }}>
+          <div className="mobile-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', maxWidth: '600px', margin: '0 auto' }}>
             {[
               { icon: '🔒', text: 'Database-layer encryption' },
               { icon: '🛡️', text: 'GDPR compliant by design' },
