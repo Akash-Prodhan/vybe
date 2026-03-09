@@ -10,7 +10,7 @@ export default async function SettingsPage() {
 
     const { data: profile } = await supabase
         .from('profiles')
-        .select('username, full_name, avatar_url, bio, is_private, last_username_change_at, created_at')
+        .select('id, username, full_name, avatar_url, bio, is_private, location, website, created_at')
         .eq('id', user.id)
         .single();
 
@@ -22,7 +22,6 @@ export default async function SettingsPage() {
             profile={profile as any}
             blockedUsers={blockedUsers as any}
             pendingRequests={pendingRequests as any}
-            userEmail={user.email || ''}
         />
     );
 }

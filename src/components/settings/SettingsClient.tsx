@@ -1,171 +1,209 @@
 'use client';
 
 import { useState } from 'react';
-import { togglePrivacy, unblockUser, acceptFollowRequest, declineFollowRequest, deleteAccount } from '@/app/(main)/settings/actions';
-import { getInitials, formatRelativeTime, cn } from '@/lib/utils';
+import { signOut } from '@/app/(auth)/actions';
+import { updateProfile, togglePrivateAccount } from '@/app/(main)/actions';
+import { unblockUser } from '@/app/(main)/settings/actions';
+import { useTheme } from '@/components/ThemeProvider';
+import { getInitials, cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
 interface SettingsClientProps {
-    profile: { username: string; full_name: string | null; avatar_url: string | null; bio: string | null; is_private: boolean; last_username_change_at: string | null; created_at: string; };
-    blockedUsers: { blocked_id: string; created_at: string; profiles: { username: string; full_name: string | null; avatar_url: string | null } }[];
-    pendingRequests: { id: string; requester_id: string; created_at: string; profiles: { username: string; full_name: string | null; avatar_url: string | null } }[];
-    userEmail: string;
+    profile: {
+        id: string; username: string; full_name: string | null; avatar_url: string | null;
+        bio: string | null; is_private: boolean; email?: string;
+        location?: string | null; website?: string | null;
+    };
+    blockedUsers: { id: string; blocked_id: string; profiles: { username: string; avatar_url: string | null } }[];
+    pendingRequests: { id: string; requester_id: string; profiles: { username: string; avatar_url: string | null } }[];
 }
 
-export default function SettingsClient({ profile, blockedUsers, pendingRequests, userEmail }: SettingsClientProps) {
-    const [tab, setTab] = useState<'account' | 'privacy' | 'blocked' | 'requests'>('account');
+export default function SettingsClient({ profile, blockedUsers, pendingRequests }: SettingsClientProps) {
+    const { theme, toggleTheme } = useTheme();
     const [isPrivate, setIsPrivate] = useState(profile.is_private);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const router = useRouter();
 
-    async function handleTogglePrivacy() {
-        const result = await togglePrivacy();
-        if (result.success) setIsPrivate(result.is_private!);
+    async function handleTogglePrivate() {
+        setIsPrivate(!isPrivate);
+        await togglePrivateAccount();
     }
-
-    async function handleUnblock(blockedId: string) {
-        await unblockUser(blockedId);
-        router.refresh();
-    }
-
-    async function handleAccept(requestId: string, requesterId: string) {
-        await acceptFollowRequest(requestId, requesterId);
-        router.refresh();
-    }
-
-    async function handleDecline(requestId: string) {
-        await declineFollowRequest(requestId);
-        router.refresh();
-    }
-
-    async function handleDeleteAccount() {
-        await deleteAccount();
-        router.push('/login');
-    }
-
-    const tabs = [
-        { key: 'account' as const, label: 'Account' },
-        { key: 'privacy' as const, label: 'Privacy' },
-        { key: 'blocked' as const, label: 'Blocked' },
-        { key: 'requests' as const, label: `Requests${pendingRequests.length > 0 ? ` (${pendingRequests.length})` : ''}` },
-    ];
 
     return (
-        <div className="max-w-xl mx-auto px-4 py-6 fade-in">
-            <h1 className="text-lg font-bold mb-5">Settings</h1>
+        <div className="feed-layout">
+            <div className="feed-center" style={{ maxWidth: '700px' }}>
+                <h1 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '24px' }}>Settings</h1>
 
-            {/* Tabs */}
-            <div className="flex mb-5 bg-bg-secondary rounded-lg overflow-hidden">
-                {tabs.map((t) => (
-                    <button key={t.key} onClick={() => setTab(t.key)} className={cn('flex-1 text-xs font-medium py-2.5 text-center transition-colors', tab === t.key ? 'bg-surface-hover text-primary' : 'text-muted hover:text-secondary')}>
-                        {t.label}
-                    </button>
-                ))}
+                {/* Account Section */}
+                <div className="settings-section">
+                    <div className="settings-section-title">Account</div>
+                    <div className="glass-card" style={{ padding: '8px' }}>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Username</div>
+                                <div className="settings-row-desc">@{profile.username}</div>
+                            </div>
+                        </div>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Display Name</div>
+                                <div className="settings-row-desc">{profile.full_name || 'Not set'}</div>
+                            </div>
+                        </div>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Bio</div>
+                                <div className="settings-row-desc">{profile.bio || 'Not set'}</div>
+                            </div>
+                        </div>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Location</div>
+                                <div className="settings-row-desc">{profile.location || 'Not set'}</div>
+                            </div>
+                        </div>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Website</div>
+                                <div className="settings-row-desc">{profile.website || 'Not set'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Privacy & Security */}
+                <div className="settings-section">
+                    <div className="settings-section-title">Privacy & Security</div>
+                    <div className="glass-card" style={{ padding: '8px' }}>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Private Account</div>
+                                <div className="settings-row-desc">Only approved followers can see your posts</div>
+                            </div>
+                            <label className="toggle-switch">
+                                <input type="checkbox" checked={isPrivate} onChange={handleTogglePrivate} />
+                                <span className="toggle-slider" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Appearance */}
+                <div className="settings-section">
+                    <div className="settings-section-title">Appearance</div>
+                    <div className="glass-card" style={{ padding: '8px' }}>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label">Dark Mode</div>
+                                <div className="settings-row-desc">Switch between light and dark themes</div>
+                            </div>
+                            <label className="toggle-switch">
+                                <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} />
+                                <span className="toggle-slider" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Blocked Users */}
+                {blockedUsers.length > 0 && (
+                    <div className="settings-section">
+                        <div className="settings-section-title">Blocked Users</div>
+                        <div className="glass-card" style={{ padding: '8px' }}>
+                            {blockedUsers.map((block: any) => (
+                                <div key={block.id} className="settings-row">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div className="w-8 h-8 avatar text-xs">
+                                            {block.profiles?.avatar_url ? <img src={block.profiles.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" /> : getInitials(block.profiles?.username || '?')}
+                                        </div>
+                                        <div className="settings-row-label">@{block.profiles?.username}</div>
+                                    </div>
+                                    <form action={async () => { await unblockUser(block.blocked_id); router.refresh(); }}>
+                                        <button type="submit" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>Unblock</button>
+                                    </form>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Pending Follow Requests */}
+                {pendingRequests.length > 0 && (
+                    <div className="settings-section">
+                        <div className="settings-section-title">Pending Follow Requests</div>
+                        <div className="glass-card" style={{ padding: '8px' }}>
+                            {pendingRequests.map((req: any) => (
+                                <div key={req.id} className="settings-row">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div className="w-8 h-8 avatar text-xs">
+                                            {req.profiles?.avatar_url ? <img src={req.profiles.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" /> : getInitials(req.profiles?.username || '?')}
+                                        </div>
+                                        <div className="settings-row-label">@{req.profiles?.username}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Danger Zone */}
+                <div className="settings-section">
+                    <div className="settings-section-title">Danger Zone</div>
+                    <div className="glass-card" style={{ padding: '8px' }}>
+                        <div className="settings-row">
+                            <div>
+                                <div className="settings-row-label" style={{ color: 'var(--color-danger)' }}>Log Out</div>
+                                <div className="settings-row-desc">Sign out of your account</div>
+                            </div>
+                            <form action={signOut}>
+                                <button type="submit" className="btn" style={{ fontSize: '12px', padding: '6px 16px', background: 'var(--color-danger)', color: 'white', border: 'none' }}>Log Out</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Account Tab */}
-            {tab === 'account' && (
-                <div className="space-y-4">
-                    <div className="card p-4 rounded-lg">
-                        <p className="text-xs font-bold text-secondary uppercase tracking-wide mb-2">Account Info</p>
-                        <div className="space-y-2">
-                            <div className="flex justify-between items-center py-1">
-                                <span className="text-sm text-muted">Email</span>
-                                <span className="text-sm">{userEmail}</span>
-                            </div>
-                            <div className="flex justify-between items-center py-1">
-                                <span className="text-sm text-muted">Username</span>
-                                <span className="text-sm">@{profile.username}</span>
-                            </div>
-                            {profile.last_username_change_at && (
-                                <p className="text-[10px] text-muted">Last changed: {formatRelativeTime(profile.last_username_change_at)}</p>
+            {/* Right Sidebar */}
+            <aside className="feed-right-sidebar">
+                <div className="glass-card">
+                    <h3 className="sidebar-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                        Account Summary
+                    </h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        <div className="w-12 h-12 avatar text-sm flex-shrink-0">
+                            {profile.avatar_url ? <img src={profile.avatar_url} alt="" className="w-12 h-12 rounded-full object-cover" /> : getInitials(profile.full_name || profile.username)}
+                        </div>
+                        <div>
+                            <p style={{ fontSize: '14px', fontWeight: 600 }}>{profile.full_name || profile.username}</p>
+                            <p style={{ fontSize: '12px', color: 'var(--color-muted)' }}>@{profile.username}</p>
+                        </div>
+                    </div>
+                    <div style={{ borderTop: '1px solid var(--color-border-light)', paddingTop: '12px' }}>
+                        <p style={{ fontSize: '13px', color: 'var(--color-secondary)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                            {isPrivate ? 'Private account' : 'Public account'}
+                        </p>
+                        <p style={{ fontSize: '13px', color: 'var(--color-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            {theme === 'dark' ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" /></svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5" /></svg>
                             )}
-                        </div>
-                    </div>
-
-                    <div className="card p-4 rounded-lg">
-                        <p className="text-xs font-bold text-secondary uppercase tracking-wide mb-2">Danger Zone</p>
-                        {!showDeleteConfirm ? (
-                            <button onClick={() => setShowDeleteConfirm(true)} className="btn btn-danger text-xs w-full py-2">Delete Account</button>
-                        ) : (
-                            <div className="space-y-2">
-                                <p className="text-sm text-danger">This will delete all your posts, comments, and data. This cannot be undone after 30 days.</p>
-                                <div className="flex gap-2">
-                                    <button onClick={() => setShowDeleteConfirm(false)} className="btn btn-secondary flex-1 text-xs py-2">Cancel</button>
-                                    <button onClick={handleDeleteAccount} className="btn btn-danger flex-1 text-xs py-2">Confirm Delete</button>
-                                </div>
-                            </div>
-                        )}
+                            {theme === 'dark' ? 'Dark mode' : 'Light mode'}
+                        </p>
                     </div>
                 </div>
-            )}
 
-            {/* Privacy Tab */}
-            {tab === 'privacy' && (
-                <div className="space-y-4">
-                    <div className="card p-4 rounded-lg">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-semibold">Private Account</p>
-                                <p className="text-xs text-muted mt-0.5">Only followers can see your posts</p>
-                            </div>
-                            <button onClick={handleTogglePrivacy} className={cn('w-11 h-6 rounded-full transition-colors relative', isPrivate ? 'bg-accent' : 'bg-bg-tertiary')}>
-                                <span className={cn('absolute top-1 w-4 h-4 bg-white rounded-full transition-transform', isPrivate ? 'left-6' : 'left-1')} />
-                            </button>
-                        </div>
-                    </div>
+                <div className="glass-card">
+                    <h3 className="sidebar-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+                        Help & Support
+                    </h3>
+                    <p style={{ fontSize: '13px', color: 'var(--color-secondary)', lineHeight: 1.6 }}>
+                        Need help? Visit our community page or check the privacy policy for more information about how we handle your data.
+                    </p>
                 </div>
-            )}
-
-            {/* Blocked Users Tab */}
-            {tab === 'blocked' && (
-                <div>
-                    {blockedUsers.length === 0 ? (
-                        <p className="text-center text-muted text-sm py-12">No blocked users</p>
-                    ) : (
-                        <div className="space-y-0.5">
-                            {blockedUsers.map((block: any) => (
-                                <div key={block.blocked_id} className="flex items-center gap-3 px-2.5 py-2 rounded-md hover:bg-surface-hover">
-                                    <div className="w-8 h-8 avatar text-xs flex-shrink-0">
-                                        {block.profiles?.avatar_url ? <img src={block.profiles.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" /> : getInitials(block.profiles?.full_name || block.profiles?.username || '')}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium truncate">{block.profiles?.username}</p>
-                                    </div>
-                                    <button onClick={() => handleUnblock(block.blocked_id)} className="btn btn-secondary text-xs px-2.5 py-1">Unblock</button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Follow Requests Tab */}
-            {tab === 'requests' && (
-                <div>
-                    {pendingRequests.length === 0 ? (
-                        <p className="text-center text-muted text-sm py-12">No pending requests</p>
-                    ) : (
-                        <div className="space-y-0.5">
-                            {pendingRequests.map((req: any) => (
-                                <div key={req.id} className="flex items-center gap-3 px-2.5 py-2 rounded-md hover:bg-surface-hover">
-                                    <div className="w-8 h-8 avatar text-xs flex-shrink-0">
-                                        {req.profiles?.avatar_url ? <img src={req.profiles.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" /> : getInitials(req.profiles?.full_name || req.profiles?.username || '')}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium truncate">{req.profiles?.username}</p>
-                                        <p className="text-[10px] text-muted">{formatRelativeTime(req.created_at)}</p>
-                                    </div>
-                                    <div className="flex gap-1">
-                                        <button onClick={() => handleAccept(req.id, req.requester_id)} className="btn btn-primary text-xs px-2 py-1">Accept</button>
-                                        <button onClick={() => handleDecline(req.id)} className="btn btn-secondary text-xs px-2 py-1">Decline</button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
+            </aside>
         </div>
     );
 }

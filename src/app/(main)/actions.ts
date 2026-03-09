@@ -329,3 +329,24 @@ export async function markAllNotificationsRead() {
         .eq('read', false);
     revalidatePath('/notifications');
 }
+
+export async function togglePrivateAccount() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_private')
+        .eq('id', user.id)
+        .single();
+
+    if (!profile) return;
+
+    await supabase
+        .from('profiles')
+        .update({ is_private: !profile.is_private })
+        .eq('id', user.id);
+    revalidatePath('/settings');
+}
+

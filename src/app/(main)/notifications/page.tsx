@@ -17,7 +17,32 @@ export default async function NotificationsPage() {
         .order('created_at', { ascending: false })
         .limit(50);
 
+    // Stats for right sidebar
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const { count: likesToday } = await supabase
+        .from('notifications')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .eq('type', 'like')
+        .gte('created_at', today.toISOString());
+
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const { count: newFollowersWeek } = await supabase
+        .from('notifications')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .in('type', ['follow', 'new_follower'])
+        .gte('created_at', weekAgo.toISOString());
+
     return (
-        <NotificationsClient notifications={(notifications || []) as any} />
+        <NotificationsClient
+            notifications={(notifications || []) as any}
+            likesToday={likesToday || 0}
+            newFollowersWeek={newFollowersWeek || 0}
+        />
     );
 }
